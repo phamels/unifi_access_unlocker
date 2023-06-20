@@ -1,11 +1,15 @@
 import requests
 from getpass import getpass
 import urllib3
+import ipaddress
 
 print(">>> Unifi Access Hub Unlocker by Pieter Hamels")
-unifi_os_uri = input("Please enter the IP address of your Unifi Access Hub: ")
-unifi_os_uri = f"https://{unifi_os_uri}"
-
+unifi_os_uri = input("Please enter the IP address of your Unifi Access Hub Controller: ")
+try:
+    ipaddress.ip_address(unifi_os_uri)
+    unifi_os_uri = f"https://{unifi_os_uri}"
+except:
+    exit('>>> Please enter a valid IP address for your Unifi Access Hub Controller.')
 
 urllib3.disable_warnings()
 s = requests.Session()
@@ -70,6 +74,7 @@ if __name__ == "__main__":
     ar = do_auth(username, password)
 
     hubs = get_hubs()
+    print(hubs)
     show_found_hubs(hubs)
     selected_hub = select_hub(hubs)
     while selected_hub is None:
